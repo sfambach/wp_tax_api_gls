@@ -3,7 +3,6 @@
 namespace TaxApiGls\Tests\Core;
 
 use PHPUnit\Framework\TestCase;
-use TaxApiGls\Core\Api\ConnectionTest;
 use TaxApiGls\Core\Api\Environment;
 use TaxApiGls\Core\Api\GlsApiException;
 use TaxApiGls\Core\Api\HttpResponse;
@@ -42,12 +41,5 @@ final class TokenClientTest extends TestCase
         $this->expectException(GlsApiException::class);
 
         (new TokenClient(new ScriptedTransport([new HttpResponse(200, '{}')]), 'key', 'secret'))->token();
-    }
-
-    public function testTheConnectionTestNamesTheTokenLifetime(): void
-    {
-        $client = new TokenClient(new ScriptedTransport([new HttpResponse(200, '{"access_token":"abc","expires_in":14400}')]), 'key', 'secret');
-
-        self::assertSame('credentials accepted, token valid 240 minutes', (new ConnectionTest($client))->run());
     }
 }

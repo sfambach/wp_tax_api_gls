@@ -21,4 +21,5 @@ return ['domain' => 'taxapigls', 'language' => 'de_DE', 'messages' => [
     'Client key or secret is missing — enter and save both first, or define them in wp-config.php.' => 'Client-Key oder Secret fehlt — erst beides eintragen und speichern oder in wp-config.php setzen.',
     'Connection works (%1$s): %2$s.' => 'Verbindung steht (%1$s): %2$s.',
     'Connection failed (%1$s): %2$s' => 'Verbindung fehlgeschlagen (%1$s): %2$s',
+    'GLS calls today: %1$d of %2$d. Other modules ask through the filter taxmod_gls_tracking, only when a page asks for fresh data.' => 'GLS-Abfragen heute: %1$d von %2$d. Andere Module fragen über den Filter taxmod_gls_tracking, nur wenn eine Seite frische Daten will.',
 ]];

@@ -11,19 +11,21 @@ use Taxmod\Core\Import\Mail\OrderMailParser;
 
 /**
  * The boundary: registers the GLS notice reader with Taxmod Mail (filter `taxmail_parsers`) and the «GLS» tab on the
- * modeller's Configuration page with access and connection test (D-1006, D-1007, D-981). It decides nothing.
+ * modeller's Configuration page with access and connection test (D-1006, D-1007, D-981), and the filter
+ * `taxmod_gls_tracking` other modules ask (D-1101). It decides nothing.
  *
  * @see https://github.com/sfambach/wp-taxonomy-modeler/blob/main/docs/pakete/import/module-schnitt.md
  */
 final class Plugin
 {
-    public const VERSION    = '0.0.2';
+    public const VERSION    = '0.0.3';
     public const CAPABILITY = 'manage_options';
     public const TAB        = 'gls';
     public const LAST_CHECK = 'taxmod_gls_last_check';
 
     public static function boot(): void
     {
+        add_filter(Tracker::FILTER, static fn (mixed $previous, mixed $number = '', mixed $mode = Tracker::STORED): ?array => (new Tracker())->filter($previous, $number, $mode), 10, 3);
         add_action('plugins_loaded', static function (): void {
             load_plugin_textdomain('taxapigls', false, dirname(plugin_basename(dirname(__DIR__, 2) . '/wp-tax-api-gls.php')) . '/languages');
 
@@ -43,9 +45,12 @@ final class Plugin
                 'reader'      => $reader,
                 'credentials' => static fn (): string => (new SettingsScreen(new StoredAccess()))->credentials(),
                 'test'        => static fn (): string => self::testConnection(),
-                'forget'      => static fn () => (new StoredAccess())->forget(),
+                'forget'      => static function (): void {
+                    (new StoredAccess())->forget();
+                    Tracker::forgetToken();
+                },
                 'guide'       => static fn (): string => SettingsScreen::guide(),
-                'render'      => static fn (): string => '',
+                'render'      => static fn (): string => (new SettingsScreen(new StoredAccess()))->fields(),
                 'save'        => static fn (array $post): bool => self::saveAccess($post),
             ]], 30);
         });
@@ -66,6 +71,7 @@ final class Plugin
 
         $field = static fn (string $name): string => is_string($post[$name] ?? null) ? trim(sanitize_text_field($post[$name])) : '';
         $access->save(Environment::tryFrom($field('taxapigls_environment')) ?? Environment::Production, $field('taxapigls_client_key'), $field('taxapigls_client_secret'));
+        Tracker::forgetToken();
 
         return $access->complete();
     }
@@ -83,7 +89,8 @@ final class Plugin
         $environment = $access->environment();
 
         try {
-            $answer = (new ConnectionTest(new TokenClient(new WpHttpTransport(), $access->clientKey(), $secret, $environment)))->run();
+            $transport = new WpHttpTransport();
+            $answer = (new ConnectionTest(new TokenClient($transport, $access->clientKey(), $secret, $environment), $transport, $environment))->run();
             update_option(self::LAST_CHECK, ['ok' => true, 'at' => current_time('mysql'), 'environment' => $environment->value, 'message' => $answer], false);
 
             /* translators: 1: sandbox or production, 2: what GLS answered */

@@ -54,6 +54,19 @@ final class SettingsScreen
             . '</tbody></table>' . $this->lastCheck();
     }
 
+    /** The Settings part: today's calls against the budget. */
+    public function fields(): string
+    {
+        $calls = Tracker::callsToday();
+
+        return '<p class="description">' . esc_html(sprintf(
+            /* translators: 1: calls today, 2: daily budget */
+            __('GLS calls today: %1$d of %2$d. Other modules ask through the filter taxmod_gls_tracking, only when a page asks for fresh data.', 'taxapigls'),
+            $calls['calls'],
+            Tracker::DAILY_BUDGET
+        )) . '</p>';
+    }
+
     private function lastCheck(): string
     {
         $last = get_option(Plugin::LAST_CHECK);
