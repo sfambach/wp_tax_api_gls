@@ -2,7 +2,7 @@
 
 namespace TaxApiGls\WordPress;
 
-use Taxmod\Core\Exception\SecretDoesNotOpen;
+use Taxmod\Core\Import\SecretSlot;
 use Taxmod\WordPress\Import\Vault;
 use TaxApiGls\Core\Api\Environment;
 
@@ -92,13 +92,8 @@ final class StoredAccess
 
     private function open(string $sealed): ?string
     {
-        try {
-            $secret = Vault::for(self::VAULT_CONTEXT)->open($sealed);
-
-            return $secret === '' ? null : $secret;
-        } catch (SecretDoesNotOpen) {
-            return null;
-        }
+        // D-1409: opening and «does not open» live once, in the modeller's SecretSlot.
+        return (new SecretSlot('', $sealed, Vault::for(self::VAULT_CONTEXT)))->value();
     }
 
     /** @return array{environment: string, key: string, secret: string} */
