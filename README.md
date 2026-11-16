@@ -2,7 +2,7 @@
 
 GLS connection for the [Taxonomy Modeller](https://github.com/sfambach/wp-taxonomy-modeler) (WordPress plugin).
 
-**Status 0.0.3 (needs modeller 0.1.89 and [Taxmod Mail](https://github.com/sfambach/wp_tax_mail) 0.6.0 or later):
+**Status 0.0.4 (needs modeller 0.2.120 and [Taxmod Mail](https://github.com/sfambach/wp_tax_mail) 0.6.0 or later):
 reads GLS parcel notices from the mailbox of Taxmod Mail and hands them to the modeller's inbox.** A notice carries
 no shop order number; the modeller gives it to the order with the same parcel number, from whatever shop (D-1017,
 D-1020), and never creates an order from it.

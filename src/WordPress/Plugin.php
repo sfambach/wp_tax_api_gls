@@ -7,7 +7,7 @@ use TaxApiGls\Core\Api\Environment;
 use TaxApiGls\Core\Api\GlsApiException;
 use TaxApiGls\Core\Api\TokenClient;
 use TaxApiGls\Core\GlsNoticeMailParser;
-use Taxmod\Core\Import\Mail\OrderMailParser;
+use Taxmod\Core\Import\Mail\ShopMailParser;
 
 /**
  * The boundary: registers the GLS notice reader with Taxmod Mail (filter `taxmail_parsers`) and the «GLS» tab on the
@@ -18,7 +18,7 @@ use Taxmod\Core\Import\Mail\OrderMailParser;
  */
 final class Plugin
 {
-    public const VERSION    = '0.0.3';
+    public const VERSION    = '0.0.4';
     public const CAPABILITY = 'manage_options';
     public const TAB        = 'gls';
     public const LAST_CHECK = 'taxmod_gls_last_check';
@@ -30,9 +30,9 @@ final class Plugin
             load_plugin_textdomain('taxapigls', false, dirname(plugin_basename(dirname(__DIR__, 2) . '/wp-tax-api-gls.php')) . '/languages');
 
             // The contract lives in the modeller; without it there is nothing to register with.
-            if (! interface_exists(OrderMailParser::class)) {
+            if (! class_exists(ShopMailParser::class)) {
                 add_action('admin_notices', static fn () => print '<div class="notice notice-warning"><p><strong>Taxmod GLS:</strong> '
-                    . esc_html__('needs the Taxonomy Modeller 0.1.89 or later and Taxmod Mail 0.6.0 or later.', 'taxapigls') . '</p></div>');
+                    . esc_html__('needs the Taxonomy Modeller 0.2.120 or later and Taxmod Mail 0.6.0 or later.', 'taxapigls') . '</p></div>');
 
                 return;
             }
