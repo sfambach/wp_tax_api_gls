@@ -79,7 +79,7 @@ final class Tracker
     public function ask(string $number): ?Parcel
     {
         $this->spend();
-        $client = new TrackingClient(new WpHttpTransport(), $this->token(), $this->access->environment());
+        $client = new TrackingClient(ApiTransport::make(), $this->token(), $this->access->environment());
 
         try {
             $parcels = $client->parcels([$number], self::language());
@@ -181,7 +181,7 @@ final class Tracker
             throw new GlsApiException('No GLS client key or secret is set.');
         }
 
-        $token = (new TokenClient(new WpHttpTransport(), $this->access->clientKey(), $secret, $this->access->environment()))->token();
+        $token = (new TokenClient(ApiTransport::make(), $this->access->clientKey(), $secret, $this->access->environment()))->token();
         $this->keepToken($token);
 
         return $token->value;

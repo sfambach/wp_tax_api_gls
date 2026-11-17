@@ -2,6 +2,10 @@
 
 namespace TaxApiGls\Core\Api;
 
+use Taxmod\Core\Http\HttpRequest;
+use Taxmod\Core\Http\HttpResponse;
+use Taxmod\Core\Http\HttpTransport;
+
 /**
  * POST /oauth2/v2/token of the GLS Authentication API v2: client key and secret as Basic auth, grant type
  * client_credentials. Every other GLS API takes the token as `Authorization: Bearer`.

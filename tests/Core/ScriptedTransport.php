@@ -2,9 +2,9 @@
 
 namespace TaxApiGls\Tests\Core;
 
-use TaxApiGls\Core\Api\HttpRequest;
-use TaxApiGls\Core\Api\HttpResponse;
-use TaxApiGls\Core\Api\HttpTransport;
+use Taxmod\Core\Http\HttpRequest;
+use Taxmod\Core\Http\HttpResponse;
+use Taxmod\Core\Http\HttpTransport;
 
 /**
  * Answers from a script and remembers what was asked.

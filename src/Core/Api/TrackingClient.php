@@ -2,6 +2,10 @@
 
 namespace TaxApiGls\Core\Api;
 
+use Taxmod\Core\Http\HttpRequest;
+use Taxmod\Core\Http\HttpResponse;
+use Taxmod\Core\Http\HttpTransport;
+
 use TaxApiGls\Core\Tracking\Parcel;
 
 /**

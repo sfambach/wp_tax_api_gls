@@ -2,6 +2,8 @@
 
 namespace TaxApiGls\Core\Api;
 
+use Taxmod\Core\Http\HttpTransport;
+
 /**
  * Proves client key and secret by asking for a token, and Track And Trace V1 by reading GLS's own test parcel; it
  * changes nothing.

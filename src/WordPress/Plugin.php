@@ -89,7 +89,7 @@ final class Plugin
         $environment = $access->environment();
 
         try {
-            $transport = new WpHttpTransport();
+            $transport = ApiTransport::make();
             $answer = (new ConnectionTest(new TokenClient($transport, $access->clientKey(), $secret, $environment), $transport, $environment))->run();
             update_option(self::LAST_CHECK, ['ok' => true, 'at' => current_time('mysql'), 'environment' => $environment->value, 'message' => $answer], false);
 

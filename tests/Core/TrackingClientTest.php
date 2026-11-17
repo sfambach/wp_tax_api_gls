@@ -5,7 +5,7 @@ namespace TaxApiGls\Tests\Core;
 use PHPUnit\Framework\TestCase;
 use TaxApiGls\Core\Api\ConnectionTest;
 use TaxApiGls\Core\Api\GlsApiException;
-use TaxApiGls\Core\Api\HttpResponse;
+use Taxmod\Core\Http\HttpResponse;
 use TaxApiGls\Core\Api\TokenClient;
 use TaxApiGls\Core\Api\TrackingClient;
 use TaxApiGls\Core\Tracking\Event;

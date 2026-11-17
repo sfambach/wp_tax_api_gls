@@ -5,7 +5,7 @@ namespace TaxApiGls\Tests\Core;
 use PHPUnit\Framework\TestCase;
 use TaxApiGls\Core\Api\Environment;
 use TaxApiGls\Core\Api\GlsApiException;
-use TaxApiGls\Core\Api\HttpResponse;
+use Taxmod\Core\Http\HttpResponse;
 use TaxApiGls\Core\Api\TokenClient;
 
 final class TokenClientTest extends TestCase
