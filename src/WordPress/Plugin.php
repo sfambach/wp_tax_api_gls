@@ -18,7 +18,7 @@ use Taxmod\Core\Import\Mail\ShopMailParser;
  */
 final class Plugin
 {
-    public const VERSION    = '0.0.5';
+    public const VERSION    = '0.0.6';
     public const CAPABILITY = 'manage_options';
     public const TAB        = 'gls';
     public const LAST_CHECK = 'taxmod_gls_last_check';

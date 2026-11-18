@@ -9,13 +9,14 @@ use TaxApiGls\Core\Api\GlsApiException;
 use TaxApiGls\Core\Api\TokenClient;
 use TaxApiGls\Core\Api\TrackingClient;
 use TaxApiGls\Core\Tracking\Event;
+use TaxApiGls\Core\Tracking\Freshness;
 use TaxApiGls\Core\Tracking\Parcel;
 use TaxApiGls\Core\Tracking\Stage;
 
 /**
  * Answers the filter `taxmod_gls_tracking` for other modules, in the shape of the DHL module's `taxmod_dhl_tracking`:
  * one parcel number in, its stage out. By default it hands back what was loaded last and never calls GLS; `refresh`
- * asks GLS now and keeps that answer. All calls of a day stay under DAILY_BUDGET, below the quota of 500.
+ * asks GLS now and keeps that answer, unless the last answer still holds (D-1435). All calls of a day stay under DAILY_BUDGET, below the quota of 500.
  */
 final class Tracker
 {
@@ -23,6 +24,8 @@ final class Tracker
     public const DAILY_BUDGET = 400;
     public const STORED       = 'stored';
     public const REFRESH      = 'refresh';
+    // D-1435: the one setting of every carrier, kept and shown by the DHL module.
+    public const FRESH_HOURS  = 'taxmod_tracking_fresh_hours';
 
     private const LAST   = 'taxmod_gls_last_answers';
     private const KEPT   = 500;
@@ -58,7 +61,8 @@ final class Tracker
 
         $last = self::lastAnswers()[$number] ?? null;
 
-        if ($mode !== self::REFRESH) {
+        // D-1435: an answer younger than the set hours, or a delivered parcel, is not asked again.
+        if ($mode !== self::REFRESH || Freshness::holds($last, time(), self::freshHours())) {
             return $last;
         }
 
@@ -90,6 +94,14 @@ final class Tracker
         }
 
         return $parcels[0] ?? null;
+    }
+
+    /** How long an answer holds before a refresh asks GLS again (D-1435). */
+    private static function freshHours(): float
+    {
+        $hours = get_option(self::FRESH_HOURS, Freshness::DEFAULT_HOURS);
+
+        return is_numeric($hours) ? max(0.0, (float) $hours) : (float) Freshness::DEFAULT_HOURS;
     }
 
     /** @return array{day: string, calls: int} */
