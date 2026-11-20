@@ -2,6 +2,9 @@
 
 namespace TaxApiGls\WordPress;
 
+use Taxmod\Core\Description\InputKind;
+use Taxmod\WordPress\Admin\ListPage;
+use Taxmod\WordPress\Draw\SelectMarkup;
 use TaxApiGls\Core\Api\Environment;
 
 /**
@@ -37,20 +40,15 @@ final class SettingsScreen
         }
 
         $current = $this->access->environment();
-        $options = '';
-
-        foreach ([Environment::Production->value => __('Production (real parcels)', 'taxapigls'), Environment::Sandbox->value => __('Sandbox (test data)', 'taxapigls')] as $value => $label) {
-            $options .= '<option value="' . esc_attr($value) . '"' . selected($current->value, $value, false) . '>' . esc_html($label) . '</option>';
-        }
+        $environments = [Environment::Production->value => __('Production (real parcels)', 'taxapigls'), Environment::Sandbox->value => __('Sandbox (test data)', 'taxapigls')];
 
         return $html . '<table class="form-table" role="presentation"><tbody>'
             . '<tr><th scope="row"><label for="taxapigls-environment">' . esc_html__('Gateway', 'taxapigls') . '</label></th>'
-            . '<td><select id="taxapigls-environment" name="taxapigls_environment">' . $options . '</select></td></tr>'
+            . '<td>' . SelectMarkup::of('taxapigls_environment', $environments, $current->value, false, attributes: ['id' => 'taxapigls-environment']) . '</td></tr>'
             . '<tr><th scope="row"><label for="taxapigls-client-key">' . esc_html__('Client key', 'taxapigls') . '</label></th>'
-            . '<td><input type="text" class="regular-text" autocomplete="off" id="taxapigls-client-key" name="taxapigls_client_key" value="' . esc_attr($this->access->clientKey()) . '"></td></tr>'
+            . '<td>' . ListPage::field(InputKind::Line, 'taxapigls_client_key', $this->access->clientKey(), ['id' => 'taxapigls-client-key', 'size' => 40]) . '</td></tr>'
             . '<tr><th scope="row"><label for="taxapigls-client-secret">' . esc_html__('Client secret', 'taxapigls') . '</label></th>'
-            . '<td><input type="password" class="regular-text" autocomplete="off" id="taxapigls-client-secret" name="taxapigls_client_secret" value="" placeholder="'
-            . esc_attr($this->access->hasStoredSecret() ? __('stored — leave empty to keep it', 'taxapigls') : '') . '"></td></tr>'
+            . '<td>' . ListPage::field(InputKind::Secret, 'taxapigls_client_secret', '', ['id' => 'taxapigls-client-secret', 'size' => 40, 'placeholder' => $this->access->hasStoredSecret() ? __('stored — leave empty to keep it', 'taxapigls') : '']) . '</td></tr>'
             . '</tbody></table>' . $this->lastCheck();
     }
 
