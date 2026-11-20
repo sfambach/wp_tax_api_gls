@@ -18,7 +18,7 @@ use Taxmod\Core\Import\Mail\ShopMailParser;
  */
 final class Plugin
 {
-    public const VERSION    = '0.0.7';
+    public const VERSION    = '0.0.8';
     public const CAPABILITY = 'manage_options';
     public const TAB        = 'gls';
     public const LAST_CHECK = 'taxmod_gls_last_check';
@@ -30,9 +30,10 @@ final class Plugin
             load_plugin_textdomain('taxapigls', false, dirname(plugin_basename(dirname(__DIR__, 2) . '/wp-tax-api-gls.php')) . '/languages');
 
             // The contract lives in the modeller; without it there is nothing to register with.
-            if (! interface_exists(\Taxmod\Core\Http\HttpTransport::class)) {
+            // D-1501: the settings tab draws its fields with ListPage::field, which the modeller has from 0.2.174 on.
+            if (! interface_exists(\Taxmod\Core\Http\HttpTransport::class) || ! class_exists(\Taxmod\WordPress\Plugin::class, false) || version_compare(\Taxmod\WordPress\Plugin::VERSION, '0.2.174', '<')) {
                 add_action('admin_notices', static fn () => print '<div class="notice notice-warning"><p><strong>Taxmod GLS:</strong> '
-                    . esc_html__('needs the Taxonomy Modeller 0.2.123 or later and Taxmod Mail 0.6.0 or later.', 'taxapigls') . '</p></div>');
+                    . esc_html__('needs the Taxonomy Modeller 0.2.174 or later and Taxmod Mail 0.6.0 or later.', 'taxapigls') . '</p></div>');
 
                 return;
             }
