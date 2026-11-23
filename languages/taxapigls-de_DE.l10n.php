@@ -25,7 +25,7 @@ return [
         'The stored secret no longer opens — the salts in wp-config.php changed. Enter it again.' => 'Das gespeicherte Secret lässt sich nicht mehr öffnen — die Salts in wp-config.php haben sich geändert. Bitte neu eingeben.',
         'This Taxonomy Modeller has no vault yet (0.1.31 or later), so the access can only be defined in wp-config.php:' => 'Dieser Taxonomy Modeller hat noch keinen Tresor (ab 0.1.31), der Zugang geht daher nur über wp-config.php:',
         'needs the Taxonomy Modeller 0.1.89 or later and Taxmod Mail 0.6.0 or later.'    => 'braucht den Taxonomy Modeller 0.1.89 und Taxmod Mail 0.6.0 oder neuer.',
-        'needs the Taxonomy Modeller 0.2.174 or later and Taxmod Mail 0.6.0 or later.'   => 'braucht den Taxonomy Modeller ab 0.2.174 und Taxmod Mail ab 0.6.0.',
+        'needs the Taxonomy Modeller 0.2.237 or later and Taxmod Mail 0.6.0 or later.'   => 'braucht den Taxonomy Modeller ab 0.2.237 und Taxmod Mail ab 0.6.0.',
         'run "composer install" in the plugin folder — the autoloader is missing.'       => 'im Plugin-Ordner «composer install» ausführen — der Autoloader fehlt.',
         'stored — leave empty to keep it'                                                => 'gespeichert — leer lassen, um es zu behalten',
     ],
