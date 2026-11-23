@@ -18,7 +18,7 @@ use Taxmod\Core\Import\Mail\ShopMailParser;
  */
 final class Plugin
 {
-    public const VERSION    = '0.0.8';
+    public const VERSION    = '0.0.9';
     /** The connection is set up in the configuration (D-1585): the modeller's right «configure». */
     public const CAPABILITY = \Taxmod\WordPress\Rights::CONFIGURE;
     public const TAB        = 'gls';
